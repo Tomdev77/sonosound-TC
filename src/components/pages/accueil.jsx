@@ -157,7 +157,6 @@ export default function Accueil() { // Component section Accueil
             <img className='ratplogo' src={ratp} alt="RATP" />{/* image récupérée de l'importation*/}
             <a href="https://www.ratp.fr/" target="_blank" rel="noopener noreferrer">
             <p id='butthere'>En savoir plus ici</p></a>
-            <h2 id='idfh2'>La région Île-de-France et la RATP, partenaires essentiels de Sonosound, garantiront un transport optimal. Nous vous encourageons vivement à consulter les horaires des lignes de RER et de métro pour vous déplacer vers les divers lieux de l'événement. De plus, veuillez noter que le transport sera exceptionnellement GRATUIT à partir de 20h tout au long de l'événement.</h2>
           </ul>
         </div>
         <CustomMap center={center} zoom={zoom} />{/* component map, récupération des données center et zoom */}
