@@ -12,8 +12,7 @@
     min-height: 85px;
     color: rgb(255, 255, 255);
     z-index: 1000!important;
-    padding: 0.8rem;
-
+   
 }
 
 .navbar__link{
@@ -82,7 +81,7 @@ ol {
     height: 85px;
     cursor: pointer;
     animation: fadeIn 0.5s ease-in;
-    padding: 0.8rem;
+   
 
 }
 
