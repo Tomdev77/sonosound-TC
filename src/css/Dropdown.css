@@ -15,7 +15,7 @@
   @keyframes dropdownAnimation {
     from {
       opacity: 0;
-      transform: translateY(-30px);
+      transform: translateY(-10px);
     }
     to {
       opacity: 1;
