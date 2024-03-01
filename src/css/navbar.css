@@ -79,7 +79,7 @@ ol {
 .navbar-bg {
     background-color: rgb(32, 32, 32); /* couleur sur la navbar défilante en background color */
     color: rgb(255, 255, 255);
-    height: 105px;
+    height: 95px;
     cursor: pointer;
     animation: fadeIn 0.5s ease-in;
     padding: 0.8rem;
