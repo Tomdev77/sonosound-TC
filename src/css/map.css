@@ -1,11 +1,7 @@
+
+
 /* Composant Map */
 
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 
 .map-container {
   width: 65%;
@@ -17,7 +13,6 @@
   margin-right: auto;
   padding: 50px;
   margin-top: 2%;
-
 }
 
 
@@ -59,16 +54,15 @@
   padding: 10px;
 }
 
-/* Location Button */
-.locationbutton {
+.locationbuttonMap {
+  position: relative; 
+  z-index: 1000; 
   font-size: 15px;
   color: rgb(255, 255, 255);
   font-weight: 500;
-  margin-left: 60%; 
   background-color: rgb(0, 0, 0);
   padding: 10px;
   cursor: pointer;
-  z-index: 5;
 }
 
 /* Style pour la mise en page responsive */
