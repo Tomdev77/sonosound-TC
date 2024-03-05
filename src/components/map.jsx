@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, TileLayer, Popup, Marker } from 'react-leaflet'; // importation carte  de la bibliothèque js leaflet
 import { divIcon, point, Icon } from 'leaflet'; // importation emoticone de leaflet
 import 'leaflet/dist/leaflet.css'; // importation css leaflet
@@ -23,6 +23,7 @@ const customIcon = new Icon({
     iconUrl: WCIcon, // récupération de l'image dans les assets
     iconSize: [38, 38], // définition de sa taille
   });
+
 
   
 const createClusterCustomIcon = function (cluster) { // fonction création cluster emoticones // groupe de marqueurs =>> cartographie
@@ -104,22 +105,31 @@ const markerwc= [
   },
 
 ];
+
+
 const CustomMap = () => {
   const [userLocation, setUserLocation] = useState(null); // État pour la localisation de l'utilisateur
   const mapRef = useRef(null); // Référence à l'instance de la carte
   
+  useEffect(() => {
+    if (userLocation) {
+      mapRef.current.setView(userLocation, 15); // Zoom to user location with zoom level 15
+    }
+  }, [userLocation]);
 
-  // Fonction pour localiser l'utilisateur sur la carte
   const locateUser = () => {
-    mapRef.current.locate();
+    mapRef.current.locate({setView: true}); // vue location trouvé
   };
 
-  // callback appelé lorsque la localisation de l'utilisateur est trouvée
+  const [markerUser, setMarkerUser] = useState([]);
+
+
   const handleLocationFound = (e) => {
-    setUserLocation(e.latlng); // Met à jour la position de l'utilisateur
-    mapRef.current.setView(e.latlng, mapRef.current.getZoom()); // Centre la carte sur la position de l'utilisateur
+    setUserLocation(e.latlng);
+  
+    // Mettre à jour markerUser avec la position de l'utilisateur
+    setMarkerUser([{ geocode: [e.latlng.lat, e.latlng.lng], popUp: 'Ma position' }]);
   };
-
 
 
   return (
@@ -136,7 +146,7 @@ const CustomMap = () => {
     attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.mapbox.com">MapBox</a>'
     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 />
-        {userLocation && <Marker position={userLocation}><Popup>Votre position actuelle</Popup></Marker>}
+{userLocation && <Marker position={userLocation}><Popup>Votre position actuelle</Popup></Marker>} {/* Marqueur utilisateur */}
         <MarkerClusterGroup
           chunkedLoading
           iconCreateFunction={createClusterCustomIcon}
@@ -158,10 +168,15 @@ const CustomMap = () => {
               <Popup>{marker.popUp}</Popup>
             </Marker>
           ))}
+
+   
         </MarkerClusterGroup>
-        <FullscreenControl position="topright" aria-hidden="true" />
+        <FullscreenControl position="topright" aria-hidden="true">  </FullscreenControl>
+
+    <button className="locationbuttonMap" onClick={locateUser}>
+      Se géolocaliser
+    </button>
       </MapContainer>
-      <button className="locationbutton" onClick={locateUser}>Se géolocaliser</button>
       {/* La fonction est appelée et met à jour la référence à l'instance de la carte */}
 
     </div>
