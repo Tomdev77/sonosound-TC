@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react'; // Importer useState et useEffect et Usememo depuis React
 import "../../css/partenaires.css";
+import axios from 'axios'; // Importer Axios
 
 
 
