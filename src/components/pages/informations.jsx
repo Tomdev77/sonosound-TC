@@ -23,7 +23,7 @@ const Informations = () => {// Component Sous section Informations du logo Accue
             const basicAuth = btoa(`${username}:${password}`);
             
             // Définition de l'URL de l'API à interroger
-            const apiUrl = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=150';
+            const apiUrl = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=100';
 
             
             // Définition de l'URL du proxy pour contourner les restrictions CORS
