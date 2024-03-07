@@ -26,72 +26,72 @@ const SceneMarkerIcon = new Icon({ //  l'icône pour les scènes
 });
 
 
-const sceneMarkers = [ // tableau markers
+const sceneMarkers = [  // géocode latitude + longitude 
   {
-    geocode: [48.9000, 2.1000], // géocode latitude + longitude 
-    id : 794,
+    geocode: [48.9098, 2.0917],  // geocode Scène 5 - Golf Saint germain -  Route de Poissy - 78100 Saint-Germain-en-Laye'
+    id : 845, 
   },
   {
-    geocode: [48.9113, 2.0869],
-    id : 796,
+    geocode: [48.8989, 2.0936], // Scène 4 - 1 Pl. Charles de Gaulle, 78100 Saint-Germain-en-Laye
+    id : 843, 
   },
   {
-    geocode: [48.8606, 2.2353],
-    id: 792,
+    geocode: [48.8768, 2.2577], // Scène 3 - Bois de Boulogne - 75016 Paris
+    id: 838,
   },
   
   {
-    geocode: [48.8465, 2.2204],
-    id: 790,
+    geocode: [48.8458, 2.2233], // Scène 2 - Parc de Saint-Cloud - 92210 Saint-Cloud France
+    id: 834,
   },
   {
-    geocode: [48.8566, 2.3522],
-    id:788,
+    geocode: [48.8566, 2.3522], // Scène 1 (principal) - Hôtel de Ville 5 Rue de Lobau - 75004 Paris
+    id:836, 
   },
+];
+
+const markershop= [ // géocode latitude + longitude 
+  {
+    geocode: [48.9098, 2.0917],// geocode Scène 5 - Golf Saint germain -  Route de Poissy - 78100 Saint-Germain-en-Laye'
+    id: 855,
+
+  },
+  {
+    geocode: [48.8989, 2.0936], // Scène 4 - 1 Pl. Charles de Gaulle, 78100 Saint-Germain-en-Laye
+    id: 853,
+  },
+  {
+    geocode: [48.8768, 2.2577], // Scène 3 - Bois de Boulogne - 75016 Paris
+    id: 849,  },
+  {
+    geocode: [48.8458, 2.2233], // Scène 2 - Parc de Saint-Cloud - 92210 Saint-Cloud France
+    id: 847,   },
+  {
+    geocode: [48.8566, 2.3522], // Scène 1 (principal) - Hôtel de Ville 5 Rue de Lobau - 75004 Paris
+    id: 832,  }, // id hotel de ville 
 
 ];
 
-const markershop= [
+const markerwc= [// géocode latitude + longitude 
   {
-    geocode: [48.9000, 2.1000],
-    id: 804,
+    geocode: [48.9098, 2.0917], // geocode Scène 5 - Golf Saint germain -  Route de Poissy - 78100 Saint-Germain-en-Laye'
+    id: 865,
   },
   {
-    geocode: [48.9113, 2.0869],
-    id: 806,
+    geocode: [48.8989, 2.0936], // Scène 4 - 1 Pl. Charles de Gaulle, 78100 Saint-Germain-en-Laye
+    id: 863,
   },
   {
-    geocode: [48.8606, 2.2353],
-    id: 802,  },
-  {
-    geocode: [48.8465, 2.2204],
-    id: 800,   },
-  {
-    geocode: [48.8566, 2.3522],
-    id: 798,  },
-
-];
-
-const markerwc= [
-  {
-    geocode: [48.9000, 2.1000],
-    id: 814,
+    geocode: [48.8768, 2.2577], // Scène 3 - Bois de Boulogne - 75016 Paris
+    id: 861,
   },
   {
-    geocode: [48.9113, 2.0869],
-    id: 796,
+    geocode: [48.8458, 2.2233],// Scène 2 - Parc de Saint-Cloud - 92210 Saint-Cloud France
+    id: 859,
   },
   {
-    geocode: [48.8606, 2.2353],
-    id: 812,
-  },
-  {
-    geocode: [48.8465, 2.2204],
-    id: 810,
-  },
-  {
-    geocode: [48.8566, 2.3522],
-    id: 808,
+    geocode: [48.8566, 2.3522], // Scène 1 (principal) - Hôtel de Ville 5 Rue de Lobau - 75004 Paris
+    id: 857, // id hotel de ville 
   },
 
 ];
@@ -119,9 +119,9 @@ const CustomMap = () => {
         });
         const data = response.data;
 
-        const filteredWC = data.filter(article => [814, 796, 812, 810, 808].includes(article.id));
-        const filteredBuvettes = data.filter(article => [804, 806, 802, 800, 798].includes(article.id));
-        const filteredScenes = data.filter(article => [796, 794, 792, 790, 788].includes(article.id));
+        const filteredWC = data.filter(article => [857, 859, 861, 863, 865].includes(article.id));
+        const filteredBuvettes = data.filter(article => [832, 847, 849, 853, 855].includes(article.id));
+        const filteredScenes = data.filter(article => [836, 834, 838, 843, 845].includes(article.id));
 
         const wcMarkers = filteredWC.map(wc => ({
           geocode: [wc.latitude, wc.longitude],
