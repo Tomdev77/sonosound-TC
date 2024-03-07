@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useMemo } from 'react'; // Importer useState et useEffect et Usememo depuis React
 import "../../css/informations.css";
+import axios from 'axios'; // Importer Axios
 
 
 const Informations = () => {// Component Sous section Informations du logo Accueil , Dropdown Menu Desktop => chemin liaison Menu.part.jsx + dropdownpart.jsx
-  const [artistes, setArtistes] = useState([]);
 
   const [informations] = useState([]); // Etat pour la récupération des données infos viala méthode fetch (stock)
   const [rechercheInfos, setRechercheInfos] = useState('');//  Etat pour la recherche d'infos (stock)
@@ -50,12 +50,18 @@ const Informations = () => {// Component Sous section Informations du logo Accue
             const filteredArticles = data.filter(article => filteredIds.includes(article.id));
     
             // Mettre à jour l'état des artistes avec les données filtrées
-            setArtistes(filteredArticles);
+            fetchArtistes(filteredArticles);
         } catch (error) {
             console.error("Erreur lors de la récupération des données:", error);
             // Gérer l'erreur réseau ici
         }
     };
+
+    // Appel de la fonction fetchArtistes lors du premier rendu et à chaque changement de filteredIds
+    fetchArtistes();
+}, [filteredIds]); // Déclenchement du useEffect lors du changement de filteredIds
+
+
 
   
 
@@ -114,10 +120,6 @@ const Informations = () => {// Component Sous section Informations du logo Accue
       </div>
     </div></div>
   );
-};
-
-export default Informations;
-
 };
 
 export default Informations;
