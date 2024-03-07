@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react'; // Importer useState et useEffect et Usememo depuis React
 import "../../css/informations.css";
 
-const API_URL = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=100';
 
 const Informations = () => {// Component Sous section Informations du logo Accueil , Dropdown Menu Desktop => chemin liaison Menu.part.jsx + dropdownpart.jsx
+  const [artistes, setArtistes] = useState([]);
 
-
-  const [informations, setInformations] = useState([]); // Etat pour la récupération des données infos viala méthode fetch (stock)
+  const [informations] = useState([]); // Etat pour la récupération des données infos viala méthode fetch (stock)
   const [rechercheInfos, setRechercheInfos] = useState('');//  Etat pour la recherche d'infos (stock)
   const [categorieFiltree] = useState(null); //  Etat pour le filtre d'infos (stock)
   const [aucuneInfosTrouvees, setAucuneInfosTrouvees] = useState(false); // État pour indiquer si aucune info n'est trouvée (stock)
@@ -15,41 +14,50 @@ const Informations = () => {// Component Sous section Informations du logo Accue
   const filteredIds = useMemo(() => [452, 496, 522, 526, 536, 554], []); // fonction filtrage des ID => articles intégrés dans wordpress
 
   useEffect(() => {
-    const fetchInfos = async () => {
-      try {
-        const username = 'tom'; // Remplacez par votre nom d'utilisateur
-        const password = 'Petitcalvejunior2025!!$$'; 
-        const basicAuth = btoa(`${username}:${password}`);
+    const fetchArtistes = async () => {
+        try {
+            const username = 'tom';
+            const password = 'Petitcalvejunior2025!!$$';
+            
+            // Encodage des informations d'authentification de base en base64
+            const basicAuth = btoa(`${username}:${password}`);
+            
+            // Définition de l'URL de l'API à interroger
+            const apiUrl = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=100';
+            
+            // Définition de l'URL du proxy pour contourner les restrictions CORS
+            const proxyUrl = '/proxy?url=';
+            
+            // Effectuer la requête GET à l'API en utilisant Axios
+            const response = await axios.get(`${proxyUrl}${encodeURIComponent(apiUrl)}`, {
+                headers: {
+                    "Content-Type": "application/json", // Type de contenu de la requête
+                    "Authorization": `Basic ${basicAuth}`, // Authentification de base
+                    "accept": 'application/json', // Type de contenu accepté dans la réponse
+                },
+            });
+            const data = response.data;
+
+            // Vérification de la réussite de la requête
+            if (!Array.isArray(data)) {
+              throw new Error("Les données ne sont pas un tableau");
+          }
   
-        const response = await fetch(API_URL, {
-          headers: {
-            Authorization: `Basic ${basicAuth}`, // Ajout de l'en-tête d'authentification de base
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error("La réponse du serveur n'est pas OK");
+            // Récupération des données JSON de la réponse
+            console.log(data); // Afficher les données JSON récupérées
+            
+            // Filtrer les articles en fonction des IDs spécifiés
+            const filteredArticles = data.filter(article => filteredIds.includes(article.id));
+    
+            // Mettre à jour l'état des artistes avec les données filtrées
+            setArtistes(filteredArticles);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des données:", error);
+            // Gérer l'erreur réseau ici
         }
-  
-        const data = await response.json();
-        const updatedData = data.map(item => ({
-          ...item,
-          title: item.title.rendered.replace(/&#8211;/g, '-'),
-          content: item.content.rendered,
-        }));
-  
-        const sortedData = updatedData.sort((a, b) => {
-          return filteredIds.indexOf(a.id) - filteredIds.indexOf(b.id);
-        });
-  
-        setInformations(sortedData);
-      } catch (error) {
-        console.error("erreur récupération données:", error);
-      }
     };
+
   
-    fetchInfos();
-  }, [filteredIds]);
 
   const rechercherInfos = event => { // Fonction pour rechercher des infos
     setRechercheInfos(event.target.value);// Met à jour l'état de recherche d'infos avec la nouvelle valeur
@@ -106,6 +114,10 @@ const Informations = () => {// Component Sous section Informations du logo Accue
       </div>
     </div></div>
   );
+};
+
+export default Informations;
+
 };
 
 export default Informations;
