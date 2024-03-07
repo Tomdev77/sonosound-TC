@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react'; // Importer useState et useEffect et Usememo depuis React
 import "../../css/artistes.css"; // * importation du fichier css concerts, style
+import axios from 'axios'; // Importer Axios
 
 export default function Artistes() { // Component  Sous section Artistes de Programmations , Dropdown Menu Desktop => chemin liaison Menu.prog.jsx + dropdown.jsx
 
@@ -9,37 +10,61 @@ export default function Artistes() { // Component  Sous section Artistes de Prog
   const [rechercheArtiste, setRechercheArtiste] = useState(''); //  Etat pour la recherche d'artiste (stock)
   const [rechercheDate, setRechercheDate] = useState(''); //  Etat pour la recherche de date (stock)
 
-  const API_URL = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=100';
   const filteredIds = useMemo(() => [114, 112, 110, 105, 102, 98, 89, 86, 74, 65, 56, 43, 81, 350, 670, 675, 678, 682, 569, 688, 691, 694, 705, 717, 720, 723, 727, 732, 736, 740], []);
   const [aucuneDateTrouvee, setAucuneDateTrouvee] = useState(false); //  État pour indiquer si aucune date n'est trouvée, affiche le message false
   const [aucunArtisteTrouve, setAucunArtisteTrouve] = useState(false); //  État pour indiquer si aucun artiste n'est trouvé, affiche le message false
 
   useEffect(() => {
     const fetchArtistes = async () => {
-      try {
-        const username = 'tom'; // Remplacez par votre nom d'utilisateur
-        const password = 'Petitcalvejunior2025!!$$'; 
-        const basicAuth = btoa(`${username}:${password}`);
+        try {
+            const username = 'tom';
+            const password = 'Petitcalvejunior2025!!$$';
+            
+            // Encodage des informations d'authentification de base en base64
+            const basicAuth = btoa(`${username}:${password}`);
+            
+            // Définition de l'URL de l'API à interroger
+            const apiUrl = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=100';
+            
+            // Définition de l'URL du proxy pour contourner les restrictions CORS
+            const proxyUrl = '/proxy?url=';
+            
+            // Effectuer la requête GET à l'API en utilisant Axios
+            const response = await axios.get(`${proxyUrl}${encodeURIComponent(apiUrl)}`, {
+                headers: {
+                    "Content-Type": "application/json", // Type de contenu de la requête
+                    "Authorization": `Basic ${basicAuth}`, // Authentification de base
+                    "accept": 'application/json', // Type de contenu accepté dans la réponse
+                },
+            });
+            const data = response.data;
+
+            // Vérification de la réussite de la requête
+            if (!Array.isArray(data)) {
+              throw new Error("Les données ne sont pas un tableau");
+          }
   
-        const response = await fetch(API_URL, {
-          headers: {
-            Authorization: `Basic ${basicAuth}`,
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error("La réponse du serveur n'est pas OK");
+            // Récupération des données JSON de la réponse
+            console.log(data); // Afficher les données JSON récupérées
+            
+            // Filtrer les articles en fonction des IDs spécifiés
+            const filteredArticles = data.filter(article => filteredIds.includes(article.id));
+    
+            // Mettre à jour l'état des artistes avec les données filtrées
+            setArtistes(filteredArticles);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des données:", error);
+            // Gérer l'erreur réseau ici
         }
-  
-        const data = await response.json();
-        setArtistes(data); // Met à jour l'état des artistes avec les données récupérées depuis l'API
-      } catch (error) {
-        console.error("erreur récupération données:", error);
-      }
     };
-  
+
+    // Appel de la fonction fetchArtistes lors du premier rendu et à chaque changement de filteredIds
     fetchArtistes();
-  }, [filteredIds]);
+}, [filteredIds]); // Déclenchement du useEffect lors du changement de filteredIds
+
+
+  
+  
 
   const rechercherArtistes = (event) => { // Fonction pour rechercher des artistes
     setRechercheArtiste(event.target.value); // Met à jour l'état de recherche d'artiste avec la nouvelle valeur
