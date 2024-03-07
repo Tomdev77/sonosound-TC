@@ -1,42 +1,66 @@
 import React, { useEffect, useState, useMemo } from 'react'; // Importer useState et useEffect et Usememo depuis React
 import "../../css/partenaires.css";
 
-const API_URL = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=100';
+
+
 
 const Partenaires = () => {
   const [categories, setCategories] = useState([]);// Etat pour la récupération des données catégories  via la méthode fetch
   const [rechercheCategorie, setRechercheCategorie] = useState('');//  Etat pour la recherche de catégories (stock)
   const [aucunecategoriesTrouvees, setAucunecategoriesTrouvees] = useState(false); //  État pour indiquer si aucune catégorie n'est trouvée, affiche le message false
-
   const filteredIds = useMemo(() => [370, 375, 392, 395, 398, 412, 417, 425, 431, 434, 435, 440, 443, 540, 545, 550], []); // fonction filtrage des ID => articles intégrés dans wordpress
+  const [artistes, setArtistes] = useState([]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const username = 'tom'; // Remplacez par votre nom d'utilisateur
-        const password = 'Petitcalvejunior2025!!$$'; 
-        const basicAuth = btoa(`${username}:${password}`);
-  
-        const response = await fetch(API_URL, {
-          headers: {
-            Authorization: `Basic ${basicAuth}`,
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error("La réponse du serveur n'est pas OK");
-        }
-  
-        const data = await response.json();
-        setCategories(data); // Met à jour l'état des catégories avec les données récupérées depuis l'API
-      } catch (error) {
-        console.error("erreur récupération données:", error);
-      }
-    };
-  
-    fetchCategories();
-  }, [filteredIds]);
+    const fetchArtistes = async () => {
+        try {
+            const username = 'tom';
+            const password = 'Petitcalvejunior2025!!$$';
+            
+            // Encodage des informations d'authentification de base en base64
+            const basicAuth = btoa(`${username}:${password}`);
+            
+            // Définition de l'URL de l'API à interroger
+            const apiUrl = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=100';
+            
+            // Définition de l'URL du proxy pour contourner les restrictions CORS
+            const proxyUrl = '/proxy?url=';
+            
+            // Effectuer la requête GET à l'API en utilisant Axios
+            const response = await axios.get(`${proxyUrl}${encodeURIComponent(apiUrl)}`, {
+                headers: {
+                    "Content-Type": "application/json", // Type de contenu de la requête
+                    "Authorization": `Basic ${basicAuth}`, // Authentification de base
+                    "accept": 'application/json', // Type de contenu accepté dans la réponse
+                },
+            });
+            const data = response.data;
 
+            // Vérification de la réussite de la requête
+            if (!Array.isArray(data)) {
+              throw new Error("Les données ne sont pas un tableau");
+          }
+  
+            // Récupération des données JSON de la réponse
+            console.log(data); // Afficher les données JSON récupérées
+            
+            // Filtrer les articles en fonction des IDs spécifiés
+            const filteredArticles = data.filter(article => filteredIds.includes(article.id));
+    
+            // Mettre à jour l'état des artistes avec les données filtrées
+            setArtistes(filteredArticles);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des données:", error);
+            // Gérer l'erreur réseau ici
+        }
+    };
+
+    // Appel de la fonction fetchArtistes lors du premier rendu et à chaque changement de filteredIds
+    fetchArtistes();
+}, [filteredIds]); // Déclenchement du useEffect lors du changement de filteredIds
+;
+
+  
   const Recherchercategorie = (categorie) => {// Fonction pour rechercher des catégories
     setRechercheCategorie(categorie);// Met à jour l'état de recherche de catégories avec la nouvelle valeur
   };
