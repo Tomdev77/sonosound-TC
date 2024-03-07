@@ -105,7 +105,7 @@ const CustomMap = () => {
 
   const username = 'tom';
   const password = 'Petitcalvejunior2025!!$$';
-  const apiUrl = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=150';
+  const apiUrl = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=100';
   const proxyUrl = '/proxy?url=';
 
   useEffect(() => {
