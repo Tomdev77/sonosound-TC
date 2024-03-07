@@ -22,7 +22,8 @@ const Partenaires = () => {
             const basicAuth = btoa(`${username}:${password}`);
             
             // Définition de l'URL de l'API à interroger
-            const apiUrl = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=100';
+            const apiUrl = 'https://sonosound.online/wp-json/wp/v2/posts?per_page=150';
+
             
             // Définition de l'URL du proxy pour contourner les restrictions CORS
             const proxyUrl = '/proxy?url=';
